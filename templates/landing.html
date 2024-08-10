@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block content %}
+  <!-- Page content -->
+  <div class="w3-content" style="max-width:1100px">
+    <!-- About Section -->
+    <div class="w3-row " id="about">
+      <div class="w3-col m6 w3-padding-large w3-hide-small">
+       <img src="static/images/Guitar_1.jpg"
+            class="w3-round w3-image w3-opacity-min"
+            alt="Table Setting" width="500" height="650">
+      </div>
+
+      <div class="w3-col m6 w3-padding-large">
+        <h1 class="w3-center">STRUM BEATS</h1><br>
+        <p class="w3-large w3-text-grey w3-hide-medium w3-justify">
+          {{ main_section_text[0] }}
+          <br><br>
+          {{ main_section_text[1] }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="w3-row w3-container">
+      <div class="w3-center w3-padding-64">
+        <span class="w3-xlarge w3-bottombar w3-border-dark-grey w3-padding-16">What We Offer</span>
+      </div>
+
+      {% for key in offering_text_dict %}
+      <div class="{{ offering_div_class_dict[key] }}">
+        <h3>{{ key }}</h3>
+        <p class="w3-justify">{{ offering_text_dict[key] }}</p>
+      </div>
+      {% endfor %}
+    </div>
+
+    <hr>
+    <!-- Courses -->
+    <div class="w3-row-padding" id="pricing">
+      <div class="w3-center w3-padding-64">
+        <span class="w3-xlarge w3-bottombar w3-border-dark-grey w3-padding-16">OUR PRICING MODEL</span>
+        <p> <br> {{ pricing_model_dict ["OUR PRICING MODEL"] }}</p>
+      </div>
+
+      <div class="w3-row">
+        <a href="javascript:void(0)" onclick="openCourses(event, 'selflearning');" id="defaultOpen">
+          <div class="w3-half w3-light-grey w3-leftbar w3-border-blue
+          tablink w3-hover-blue w3-padding">SELF LEARNING COURSES</div>
+        </a>
+      </div>
+
+      <div id="selflearning" class="w3-container courses w3-border" style="display:none">
+        <h2>SELF LEARNING COURSES</h2>
+        <ul class="w3-border">
+          {% for bullet in pricing_model_dict["SELF LEARNING COURSES"]["bullet_points"] %}
+          <li>{{ bullet }}</li>
+          {% endfor %}
+        </ul>
+
+        <table class="w3-table w3-striped w3-bordered w3-card-4">
+          <thead>
+            <tr class="w3-blue">
+              {% for item in course_price_list_head[0] %}
+              <th>{{ item }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+
+          {% for row in course_price_list %}
+          <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      <br><br>
+      </div>
+
+    </div>
+    <br><br><br><br><br><br>
+    <hr>
+
+    <!-- Contact -->
+    <div class="w3-center w3-padding-64" id="contact">
+      <span class="w3-xlarge w3-bottombar w3-border-dark-grey w3-padding-16">Contact Us</span>
+    </div>
+
+    <form class="w3-container" action="/action_page.php" target="_blank">
+      <div class="w3-section">
+        <label>Name</label>
+        <input class="w3-input w3-border w3-hover-border-black" style="width:100%;" type="text" name="Name" required>
+      </div>
+      <div class="w3-section">
+        <label>Email</label>
+        <input class="w3-input w3-border w3-hover-border-black" style="width:100%;" type="text" name="Email" required>
+      </div>
+      <div class="w3-section">
+        <label>Subject</label>
+        <input class="w3-input w3-border w3-hover-border-black" style="width:100%;" name="Subject" required>
+      </div>
+      <div class="w3-section">
+        <label>Message</label>
+        <textarea class="w3-input w3-border w3-hover-border-black" style="width:100%;" name="Message" required> </textarea>
+      </div>
+      <button type="submit" class="w3-button w3-block w3-black">Send</button>
+    </form>
+
+    <br><br><br><br><br><br><br><br>
+  <!-- End page content -->
+  </div>
+{% endblock %}

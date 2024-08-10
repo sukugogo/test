@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <!-- Page Container -->
+
+  <div class="w3-content w3-margin-top w3-padding-large w3-round-xlarge"
+       style="background-image: url('static/images/Piano_1.jpg'); background-repeat: no-repeat;
+       background-attachment: fixed; background-size: cover; max-width:80%;
+       background: linear-gradient(to right, #136a8a, #267871); min-width:350px;">
+    <br>
+    <div class="w3-row-padding" style="display:flex; justify-content:center;">
+
+      <!-- Course Instrument Selection -->
+      <div class="w3-col m11 " style="min-width:350px">
+        <!-- Select Instrument -->
+        <div class="w3-content w3-white w3-border w3-round-xlarge w3-center w3-hover-border-grey"
+                 style="width:85%;min-width:320px">
+        <!div class="w3-container  w3-round-medium">
+          <form method="POST" action="/courses">
+            <div class="w3-container w3-round-medium">
+                <div class="w3-row">
+
+                  <div class="w3-half w3-panel" >
+                    <div class="w3-center" style="padding-top:4%;width:100%">
+                      <select id="instrumentOption" class="w3-select w3-border " name="instrumentOption">
+                          <option value="" disabled > Choose your Instrument ...</option>
+                          {% for option in instrument_list %}
+                            {% if option == "Guitar" %}
+                                <option name="Guitar" value="Guitar" selected>Guitar</option>
+                            {% else %}
+                                <option name="{{ option }}" value="{{ option }}">{{ option }}</option>
+                            {% endif %}
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="w3-half w3-panel" >
+                    <div class="w3-center">
+                      <p>
+                          <button id="instrumentOptionButton"
+                                  class="w3-btn w3-teal w3-round-large " style="width:80%">
+                            View Courses
+                          </button>
+                      </p>
+                    </div>
+                  </div>
+
+                </div>
+            </div>
+          </form>
+        </div>
+
+        <hr>
+
+        <!-- Display Course Details -->
+        <div class="w3-col m12 w3-round-medium" style="min-width:320px">
+             <!-- Course Price Cards -->
+            <div id= {{ instrument }} style="display:block;">
+                <div  class="w3-container w3-margin-top w3-center w3-round-large ">
+
+                    {% for row in course_price_list %}
+                    <!-- Absolute Beginners -->
+                    <div class="w3-third w3-white w3-margin-right w3-section w3-text-left w3-hover-border-black w3-round-large" style="width:300px">
+                        <h4 class="w3-margin w3-center w3-text-indigo w3-round-medium"><b> {{ instrument }} </b></h4>
+                        <h5 class="w3-margin w3-center w3-text-purple"> <b>{{ row[1] }}</b> </h5>
+                        <hr class="w3-margin">
+                        <div class="w3-container w3-margin-left" >
+                            <h3 class="w3-left w3-text-indigo w3-justify ">
+                                <b> {{ row[2] }} </b> <span class="w3-small w3-opacity" >/month</span> <br>
+                                <b> {{ row[3] }} </b> <span class="w3-small w3-opacity">/qtr  </span> <br>
+                                <b> {{ row[4] }} </b> <span class="w3-small w3-opacity">/half yearly</span> <br>
+                            </h3>
+                        </div>
+                        <hr class="w3-margin">
+                        <form method="POST" action="/courses">
+                            {% if row[2] == 0 %}
+                                <button name="free_enroll" value="{{ row[1] }}"
+                                        class="w3-button w3-margin-bottom w3-green w3-round-large">
+                                    Enroll [ FREE ]
+                                </button>
+                            {% else %}
+                                <button name="enroll" value="{{ row[1] }}"
+                                        class="w3-button w3-margin-bottom w3-green w3-round-large">
+                                    Enroll Now
+                                </button>
+                            {% endif %}
+
+                        </form>
+                        <hr class="w3-margin">
+                        <div class="w3-container" style="text-align:left;">
+                            <p> <b >You will learn:</b> </p>
+                            <p>
+                                {% for bullet in course_bullet[row[1]]['bulletPoints'] %}
+                                    {% if bullet == '' %}
+                                    &nbsp
+                                    {% else %}
+                                    <li class="w3-margin-left w3-left">{{ bullet }}</li><br>
+                                    {% endif %}
+                                {% endfor %}
+                            </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <br><br>
+            </div>
+            <br>
+        </div>
+      </div>
+    </div>
+
+    <!-- End Page Container -->
+  </div>
+
+{% endblock %}

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>STRUM BEATS</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../static/css/w3css.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.2/css/all.css" crossorigin="anonymous">
+	<link src="../static/js/googleapis_jquery.min.js">
+	<style>
+		body, button {font-family: "Times New Roman", Georgia, Serif;}
+		h1, h2, h3, h4, h5, h6 {
+		  font-family: "Playfair Display";
+		  letter-spacing: 1%;
+		}
+	</style>
+</head>
+<body>
+    <!-- Navbar (sit on top) -->
+    <div class="w3-top " style="position:sticky;">
+        <div class="w3-bar w3-white w3-padding w3-card " style="letter-spacing:4px;">
+            <a href="#home" class="w3-bar-item w3-button">STRUM BEATS</a>
+          <!-- Right-sided navbar links. -->
+            <div class="w3-right ">
+                {% for button, attr in navbar_dict.Buttons.items() %}
+                <a href="{{ attr.href }}" class="{{ attr.class }}" >{{button}}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="w3-container w3-yellow " style="margin-left:15%;width:70%">
+                <span onclick="this.parentElement.style.display='none'"
+                      class="w3-btn-floating w3-grey w3-right w3-xlarge">&times;</span>
+                <h3>{% for category, message in messages %}</h3>
+                <p class="{{ category }} w3-center">{{ message }}</p>
+                    {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Page Container -->
+    <div class="w3-content w3-margin-top w3-padding-large w3-round-xlarge"
+           style="max-width:98%; background: linear-gradient(to right, #136a8a, #267871); min-width:350px;">
+        <br>
+
+        <button class="w3-btn w3-block w3-round-medium w3-padding-small w3-transparent w3-hover-none"
+                onclick="accordion_sidebar('course_sidebar')">
+            <h5 class="w3-left-align w3-padding-large">
+                <i id="icon_course_sidebar" class="fa fa-solid fa-bars fa-sm w3-padding w3-white"></i>
+                <b class="w3-text-white">Course List</b>
+            </h5>
+        </button>
+
+        <div class="w3-container" style="display:none;width:30%;min-width:320px;" id="course_sidebar">
+            <div class="w3-container w3-white w3-round-medium w3-center" style="min-width:320px;">
+                <br>
+                <!-- Display Course Details -->
+                <div class="w3-container w3-round-medium" style="min-width:300px;padding:0">
+                    {% if course_list == [] %}
+                      <div class="w3-content w3-white w3-border w3-card-2 w3-round-xlarge w3-center w3-hover-border-grey"
+                         style="width:90%;">
+                        <h3 class="w3-center w3-padding-large w3-text-red"><b>You have not Enrolled in any courses</b></h3>
+                        <hr style="width:95%;margin-left:2.5%;" align="center">
+                        <h5 class="w3-padding-large"> Please Enroll in One of our Courses to proceed</h5>
+                        <form action="/courses">
+                          <button class="w3-button w3-margin-bottom w3-green w3-round-large">
+                            Enroll Now
+                          </button>
+                        </form>
+                      </div>
+                    {% endif %}
+
+                    {% for option in lesson_list %}
+                      <div class="w3-white w3-border w3-card-2 w3-round-xlarge w3-center w3-hover-border-grey"
+                         style="width:100%;">
+                        <button class="w3-btn w3-block w3-round-medium w3-padding-large w3-transparent w3-hover-none"
+                                onclick="accordion('{{ option[0] }}')">
+                          <h6 class="w3-left-align w3-padding-large">
+                            <b>{{ option[0] }}</b>
+                            <i id="icon_{{ option[0] }}" class="fa fa-solid fa-plus fa-sm w3-right w3-padding"></i>
+                          </h6>
+                        </button>
+                        <div id="{{ option[0] }}" class="w3-container w3-hide">
+                          <hr style="width:95%;margin-left:2.5%;" align="center">
+                          <button class="w3-btn w3-block w3-round-medium w3-left-align w3-padding-large w3-border w3-light-grey"
+                                  style="width:95%;margin-left:2.5%;" align="center" onclick="accordion('{{ option[0] }}{{ option[1] }}')">
+                            {{ option[1] }}
+                            <i id="icon_{{ option[0] }}{{ option[1] }}"
+                               class="fa fa-solid fa-plus fa-beat fa-sm w3-right w3-padding"></i>
+                          </button> <br>
+                          <div id="{{ option[0] }}{{ option[1] }}" class="w3-container w3-hide">
+                            {% for lesson in option[2] %}
+                            <button class="w3-btn w3-block w3-round-medium w3-left-align w3-padding-large w3-hover-light-grey"
+                                    align="center" style="width:92.5%;margin-left:5%;">
+                              <a style="text-decoration: none"
+                                 href="/guitar/guitar_lessons?lessonSrc={{ lesson[1] }}">
+                                <i class="fa fa-play-circle" style="color:teal"></i> {{ lesson[0] }}
+                              </a>
+                            </button>
+                            {% endfor %}
+                          </div>
+                          <br>
+                        </div>
+                      </div>
+                    <br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div id="lessonContent" class="w3-container w3-white w3-margin-small w3-round-medium"
+             style="padding-left:5%;padding-right:5%;">
+            <br>
+            {% block content %} page_content {% endblock %}
+        </div>
+
+        <br><br>
+        <div>
+            <div class="w3-half">
+                <button class="w3-button w3-round-medium w3-padding-large w3-light-grey w3-hover-light-blue"
+                        style="width:98%;margin-left:1%">
+                    {% if prev_lesson_list[0] == -1 %}
+                        <a style="text-decoration: none" href="/dashboard">
+                            <i class="fa fa-play-circle fa-rotate-180" style="color:teal"></i>
+                            <b>{{ prev_lesson_list[1] }}</b> {{ prev_lesson_list[2] }}
+                        </a>
+                    {% else %}
+                        <a style="text-decoration: none" href="/guitar/guitar_lessons?lessonSrc={{ prev_lesson_list[0] }}">
+                            <i class="fa fa-play-circle" style="color:teal"></i>
+                            <b>{{ prev_lesson_list[1] }}</b> {{ prev_lesson_list[2] }}
+                        </a>
+                    {% endif %}
+                </button>
+            </div>
+            <div class="w3-half">
+                <button class="w3-button  w3-round-medium w3-padding-large w3-light-grey w3-hover-light-blue"
+                        style="width:98%;margin-left:1%">
+                    {% if next_lesson_list[0] == -1 %}
+                        <a style="text-decoration: none" href="/dashboard">
+                            <i class="fa fa-play-circle" style="color:teal"></i>
+                            <b>{{ next_lesson_list[1] }}</b> {{ next_lesson_list[2] }}
+                        </a>
+                    {% else %}
+                        <a style="text-decoration: none" href="/guitar/guitar_lessons?lessonSrc={{ next_lesson_list[0] }}">
+                            <i class="fa fa-play-circle" style="color:teal"></i>
+                            <b>{{ next_lesson_list[1] }}</b> {{ next_lesson_list[2] }}
+                        </a>
+                    {% endif %}
+                </button>
+            </div>
+        </div><br><br><br><br>
+    </div>
+
+    <br><br>
+
+    <!-- Footer -->
+    <footer class="w3-center w3-light-grey w3-padding-large ">
+    <p> Happy Learning ! </p>
+    </footer>
+</body>
+
+{% for js in navbar_dict.JS_ref %}
+<script src="../{{ js }}"> </script>
+{% endfor %}
+<script type="module" src="https://md-block.verou.me/md-block.js"></script>
+</html>

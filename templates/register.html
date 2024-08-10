@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <!-- Page Container -->
+  <div class="w3-content" style="max-width:1100px">
+    <!-- About Section -->
+    <div class="w3-row w3-padding-64" id="about">
+      <div class="w3-col m6 w3-padding-large w3-hide-small"> <br><br><br><br>
+       <img src="static/images/Drums_1.jpg"
+            class="w3-round w3-image w3-opacity-min"
+            alt="Table Setting" width="500" height="650">
+      </div>
+
+      <div class="w3-col m6 w3-padding-large w3-border w3-round-xlarge  ">
+        <h1>Sign Up</h1>
+        <hr>
+        <form method="POST" action="/register">
+            <p style="color:black;line-height:0"><b>Full Name</b></p>
+            <input class="w3-padding-medium " style="width:100%" value="{{ request.form['fullname'] }}"
+                   type="text" name="fullname" placeholder="Full Name" required> <br><br>
+            <p style="color:black;line-height:0"><b>Email ID</b></p>
+            <input class="w3-padding-medium" style="width:100%" value="{{ request.form['username'] }}"
+                   type="email" name="username" placeholder="Email ID" required> <br><br>
+            <p style="color:black;line-height:0"><b>Phone Number</b></p>
+            <input class="w3-padding-medium" style="width:100%" value="{{ request.form['phone'] }}"
+                   type="number" name="phone" placeholder="Phone Number" required> <br><br>
+            <p style="color:black;line-height:0"><b>Password</b></p>
+            <input class="w3-padding-medium" style="width:100%" id="password"
+                   type="password" name="password" placeholder="Password" required> <br><br>
+            <p style="color:black;line-height:0"><b>Reconfirm Password</b></p>
+            <input class="w3-padding-medium" style="width:100%" id="confirm_password"
+                   type="password" name="re_password" placeholder="Reconfirm Password" required> <br><br>
+
+            {% if error %}
+              <p class="w3-center" style="color:red; " >{{ error }}</p>
+            {% endif %}
+
+            <button type="submit" style="width:100%; align:justify" id="submit"
+                    class="w3-button w3-green w3-padding-large w3-round-large ">Sign Up</button>
+        </form>
+        <p class="register-link w3-center">Already have an account?
+          <a href="/login" class="w3-hover-green" style="color:purple">Login</a>
+        </p>
+      </div>
+
+    </div>
+
+  <!-- End Page Container -->
+  </div>
+
+{% endblock %}

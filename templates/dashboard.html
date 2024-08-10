@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <!-- Page Container -->
+
+  <div class="w3-content w3-margin-top w3-padding-large w3-round-xlarge"
+       style="background-image: url('static/images/Piano_1.jpg'); background-repeat: no-repeat;
+       background-attachment: fixed; background-size: cover; max-width:80%;
+       background: linear-gradient(to right, #136a8a, #267871); min-width:350px;">
+    <br>
+    <div class="w3-row-padding" style="display:flex; justify-content:center;">
+
+      <!-- Left Column -->
+      <div class="w3-col m3 w3-hide-small">
+        <div class="w3-white w3-round-large">
+          <div class="w3-display-container w3-center w3-padding ">
+            <img src="static/images/Avatar_Male_1.png" class="w3-circle w3-center" style="width:50%">
+            <!==== NEED TO GET THIS FROM DB ====>
+            <h2 style="overflow:hidden">{{ full_name }}</h2>
+          </div>
+          <div class="w3-container"> <hr>
+            <p class="w3-large w3-center w3-text-teal"><b>My Skills</b></p>
+            <button onclick="accordion('test')" class="w3-btn w3-block w3-blue w3-round-large w3-left-align">
+              View Guitar Skills
+            </button>
+            <div id="test" class="w3-container ">
+              <p style="line-height: 0.1;">Chords</p>
+              <div class="w3-light-grey w3-round-xlarge w3-small">
+                <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:0%">0%</div>
+              </div>
+              <p style="line-height: 0.1;">Strumming</p>
+              <div class="w3-light-grey w3-round-xlarge w3-small">
+                <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:0%">0%</div>
+              </div>
+              <p style="line-height: 0.1;">Song Play</p>
+              <div class="w3-light-grey w3-round-xlarge w3-small">
+                <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:0%">0%</div>
+              </div>
+              <p style="line-height: 0.1;">Pitch</p>
+              <div class="w3-light-grey w3-round-xlarge w3-small">
+                <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:0%">0%</div>
+              </div>
+              <p style="line-height: 0.1;">Finger Picking</p>
+              <div class="w3-light-grey w3-round-xlarge w3-small">
+                <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:0%">0%</div>
+              </div>
+            </div>
+
+
+            <!==== NEED TO GET THIS FROM DB ====>
+
+            <br>
+          </div>
+        </div><br>
+      </div>
+
+      <!-- Right Column -->
+      <div class="w3-col m9 " style="min-width:350px">
+
+        <!-- Select Instrument -->
+        <div class="w3-content w3-white w3-border w3-card-2 w3-round-xlarge w3-center w3-hover-border-grey"
+                 style="width:85%;min-width:320px">
+        <!div class="w3-container  w3-round-medium">
+          <form method="POST" action="/dashboard">
+            <div class="w3-container w3-round-medium">
+                <div class="w3-row">
+
+                  <div class="w3-half w3-panel" >
+                    <div class="w3-center" style="padding-top:4%;width:100%">
+                      <select id="courseOption" class="w3-select w3-border " name="courseOption">
+                          <option value="" disabled > Select Enrolled Courses ...</option>
+                          {% for option in course_list %}
+                              {% if option[0] == 0 %}
+                              <option name="{{ option[1] }}" value="{{ option[1] }}" selected>{{ option[1] }}</option>
+                              {% else %}
+                              <option name="{{ option[1] }}" value="{{ option[1] }}">{{ option[1] }}</option>
+                              {% endif %}
+                          {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="w3-half w3-panel" >
+                    <div class="w3-center">
+                      <p>
+                          <button id="courseOptionButton"
+                                  class="w3-btn w3-teal w3-round-large " style="width:80%">
+                            View Enrolled Course
+                          </button>
+                      </p>
+                    </div>
+                  </div>
+
+                </div>
+            </div>
+          </form>
+        </div>
+
+        <hr>
+
+        <!-- Display Course Details -->
+        <div class="w3-container w3-round-medium" style="min-width:320px">
+            {% if course_list == [] %}
+              <div class="w3-content w3-white w3-border w3-card-2 w3-round-xlarge w3-center w3-hover-border-grey"
+                 style="width:90%;">
+                <h3 class="w3-center w3-padding-large w3-text-red"><b>You have not Enrolled in any courses</b></h3>
+                <hr style="width:95%;margin-left:2.5%;" align="center">
+                <h5 class="w3-padding-large"> Please Enroll in One of our Courses to proceed</h5>
+                <form action="/courses">
+                  <button class="w3-button w3-margin-bottom w3-green w3-round-large">
+                    Enroll Now
+                  </button>
+                </form>
+              </div>
+            {% endif %}
+
+            {% for option in lesson_list %}
+              <div class="w3-content w3-white w3-border w3-card-2 w3-round-xlarge w3-center w3-hover-border-grey"
+                 style="width:90%;">
+                <button class="w3-btn w3-block w3-round-medium w3-padding-large w3-transparent w3-hover-none"
+                        onclick="accordion('{{ option[0] }}')">
+                  <h5 class="w3-left-align w3-padding-large">
+                    <b>{{ option[0] }}</b>
+                    <i id="icon_{{ option[0] }}" class="fa fa-solid fa-plus fa-sm w3-right w3-padding"></i>
+                  </h5>
+                </button>
+                <div id="{{ option[0] }}" class="w3-container w3-hide">
+                  <hr style="width:95%;margin-left:2.5%;" align="center">
+                  <button class="w3-btn w3-block w3-round-medium w3-left-align w3-padding-large w3-border w3-light-grey"
+                          style="width:95%;margin-left:2.5%;" align="center" onclick="accordion('{{ option[0] }}{{ option[1] }}')">
+                    {{ option[1] }}
+                    <i id="icon_{{ option[0] }}{{ option[1] }}"
+                       class="fa fa-solid fa-plus fa-beat fa-sm w3-right w3-padding"></i>
+                  </button> <br>
+                  <div id="{{ option[0] }}{{ option[1] }}" class="w3-container w3-hide">
+                    {% for lesson in option[2] %}
+                    <button class="w3-btn w3-block w3-round-medium w3-left-align w3-padding-large w3-hover-light-grey"
+                            align="center" style="width:92.5%;margin-left:5%;">
+                      <a style="text-decoration: none"
+                         href="/guitar/guitar_lessons?lessonSrc={{ lesson[1] }}">
+                        <i class="fa fa-play-circle" style="color:teal"></i> {{ lesson[0] }}
+                      </a>
+                    </button>
+                    {% endfor %}
+                  </div>
+                  <br>
+                </div>
+              </div>
+            <br>
+            {% endfor %}
+            <br>
+        </div>
+      </div>
+    </div>
+
+    <!-- End Page Container -->
+  </div>
+
+{% endblock %}
